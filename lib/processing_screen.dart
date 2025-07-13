@@ -1,0 +1,167 @@
+import 'package:flutter/material.dart';
+
+class ProcessingScreen extends StatelessWidget {
+  const ProcessingScreen({super.key});
+
+  final List<Map<String, dynamic>> orders = const [
+    {
+      "name": "Denim Jacket",
+      "image": "assets/dj.webp",
+      "price": "₹1,999",
+      "daysLeft": 1,
+      "totalDays": 10
+    },
+    {
+      "name": "Loffer",
+      "image": "assets/loffer.jpg",
+      "price": "₹999",
+      "daysLeft": 4,
+      "totalDays": 10,
+    },
+    {
+      "name": "Watch",
+      "image": "assets/watch.jpg",
+      "price": "₹2,000",
+      "daysLeft": 8,
+      "totalDays": 10,
+    },
+    {
+      "name": "Belt",
+      "image": "assets/belt.webp",
+      "price": "₹1,000",
+      "daysLeft": 3,
+      "totalDays": 10,
+    },
+    {
+      "name": "Cheque Shirt",
+      "image": "assets/cshirt.jpg",
+      "price": "₹1,000",
+      "daysLeft": 6,
+      "totalDays": 10,
+    }
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 248, 245, 245),
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 212, 141, 165),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "Processing Orders",
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+          final int daysLeft = order["daysLeft"];
+          final int totalDays = order["totalDays"];
+          final double progress = 1 - (daysLeft / totalDays);
+
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            elevation: 5,
+            margin: const EdgeInsets.only(bottom: 20),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                children: [
+                  Image.asset(
+                    order["image"],
+                    height: 380,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    height: 250,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent,
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              order["name"],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              order['price'],
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "⏳ $daysLeft days left to deliver",
+                              style: const TextStyle(
+                                color: Colors.amberAccent,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinearProgressIndicator(
+                                minHeight: 2,
+                                value: progress,
+                                backgroundColor: Colors.white24,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  progress > 0.8
+                                      ? Colors.red
+                                      : progress > 0.5
+                                          ? Colors.orange
+                                          : Colors.green,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "Remaining $totalDays days",
+                              style: const TextStyle(
+                                color: Colors.white60,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ])),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
